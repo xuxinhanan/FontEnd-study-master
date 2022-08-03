@@ -82,18 +82,16 @@ module.exports = {
 };
 ~~~
 
-
-
 上例包含四个模块，形成如下模块关系图：
 
 ![图片](https://mmbiz.qpic.cn/mmbiz_png/3xDuJ3eicibllNWYkn0jqh4vRxWtl9tQRDFw5UDyUqL9UZyUQMTtkKsxSJvm0zHP3oWyufU7QQrvP2BE5x7HyvXQ/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1)
 
-`entry-a`、`entry-b` 分别被视作 Initial Chunk 处理；`async-module` 被 `entry-a` 以异步方式引入，因此被视作 Async Chunk 处理。那么对于 `common` 模块来说，分别被三个不同的 Chunk 引入，此时引用次数为 3，命中 `optimization.splitChunks.minChunks = 2` 规则，因此该模块**「可能」**会被单独分包，最终产物：
+最终产物：
 
-- `entry-a.js`
-- `entry-b.js`
-- `async-module.js` 
-- `common.js`  **（命中 minChunks 规则，单独分包）**
+- `entry-a.js`（配置的入口文件的相关依赖单独打包）
+- `entry-b.js`（配置的入口文件的相关依赖单独打包）
+- `async-module.js` （异步引入的文件单独打包）
+- `common.js`  **（命中 minChunks 规则：引用次数大于3，单独分包）**
 
 
 
@@ -222,11 +220,6 @@ module.exports = {
 };
 ```
 
-+ 分包结果：
-
-![image-20220718144327084](C:\Users\64554\AppData\Roaming\Typora\typora-user-images\image-20220718144327084.png)
-
-![image-20220718144334161](C:\Users\64554\AppData\Roaming\Typora\typora-user-images\image-20220718144334161.png)
 
 
 
@@ -234,87 +227,20 @@ module.exports = {
 
 
 
-## 补充：chunk 相关知识
 
 
 
-### 分包规则
-
-webpack 会根据模块依赖图的内容组织分包成 Chunk 文件，默认的分包规则有：
-
-- 从 `entry` 入口下依赖的模块共同组织成一个 chunk
-- 异步模块单独组织为一个 chunk
-- `entry.runtime` 单独组织成一个 chunk
 
 
+## 补充：路由懒加载
 
-####  Entry 入口分包
+把不同路由对应的组件分割成不同的代码块，然后当路由被访问的时候才加载对应组件。
 
-在生成阶段，webpack 遍历 entry 属性值，为每一个 entry 单独生成 chunk，之后再根据模块依赖图将 entry 依赖的所有模块打包进 chunk 中。以下列配置为例：
+如何实现？**异步组件 + 动态导入语法 import**
 
 ~~~js
-module.exports = {
-  entry: {
-    main: "./src/main",
-    home: "./src/home",
-  }
-};
+const Home = () => import(/*webpackChunkName:"home-chunk"*/'../pages/Home.vue')
 ~~~
-
-Webpack 遍历 entry 对象属性并创建出 `chunk[main]` 、`chunk[home]` 两个对象，此时两个 chunk 分别包含 `main` 、`home` 模块：
-
-![图片](https://mmbiz.qpic.cn/mmbiz_png/3xDuJ3eiciblnHpXTIbcTqTMfaHyka6x4JS2vjagVQZGR7aAnVEFRJIw2GTkU0lDxnuFGobnUfFlKFqonvJ7RZJw/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1)
-
-初始化完毕后，Webpack 会根据依赖图，将 entry 入口文件的依赖塞入对应的 chunk 中。比如对于如下文件依赖：
-
-<img src="https://mmbiz.qpic.cn/mmbiz_png/3xDuJ3eiciblnHpXTIbcTqTMfaHyka6x4JwGUZIDejouX1u36o4M1AWoPYg2NW0ZHjE7R5N9RELMoeodBicH0YRkA/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片" style="zoom:50%;" />
-
-main.js 以同步方式直接或间接引用了 a/b/c/d 四个文件，因此最终形成：
-
-![图片](https://mmbiz.qpic.cn/mmbiz_png/3xDuJ3eiciblnHpXTIbcTqTMfaHyka6x4J42MibOoA9z4TvvHU7cNcTc89giaS8rLucrLKc9Pn1Tov9ib3uHrDWviagA/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1)
-
-**PS：根据 entry  生成的 chunk 包 被称为「Initial chunk」 。**
-
-
-
-#### 异步模块分包
-
-分析 模块依赖图 时，每次遇到异步模块都会为之创建单独的 Chunk ，单独打包异步模块。例如对于下面的例子：
-
-~~~js
-// index.js, entry 文件
-import 'sync-a'
-import 'sync-b'
-
-import('async-a')
-~~~
-
-在 `index.js` 中，以同步方式引入 `sync-a`、`sync-b`；以异步方式引入 `async-a` 模块；同时，在 async-a 中以同步方式引入 sync-c 模块。对应的模块依赖如：
-
-![图片](https://mmbiz.qpic.cn/mmbiz_png/3xDuJ3eiciblnHpXTIbcTqTMfaHyka6x4JiaDhESNNnFnTvicQCo9iaXmJCVoDjREicmYrZ1KXILcby6pHpsRUtcXZwA/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1)
-
-
-
-此时，webpack 会为入口 `index.js`、异步模块 `async-a.js` 分别创建分包，形成如下数据：
-
-![图片](https://mmbiz.qpic.cn/mmbiz_png/3xDuJ3eiciblnHpXTIbcTqTMfaHyka6x4JSluX3xtm6bBDQic5KEY0ic0qPOmZrKRxuxIZEKpXX4fq8bw10zicMWgoQ/640?wx_fmt=png&wxfrom=5&wx_lazy=1&wx_co=1)
-
-
-
-上述分包方案默认情况下会生成两个文件：
-
-- 入口 `index` 对应的 `index.js`
-- 异步模块 `async-a` 对应的 `src_async-a_js.js`
-
-**PS: 异步模块生成的 chunk ，通常称之为** **「Async chunk」** **。**
-
-
-
-
-
-
-
-
 
 
 
