@@ -1,3 +1,13 @@
+> **keep-alive 是 vue 中的内置组件，使用 KeepAlive 后，被包裹的组件在经过第一次渲染后的组件会被缓存起来，然后再下一次再次渲染该组件的时候，直接从缓存中取出组件实例进行渲染，不需要再走一次组件初始化，render 和 patch 等一系列流程，减少了 script 的执行时间，性能更好。**
+
+
+
+> **keepalive实现的本质是缓存管理，在加上特殊的挂载/卸载逻辑。**
+
+# 缓存管理
+
+## 1. LRU管理缓存
+
 LRU（ least recently used）根据数据的历史记录来淘汰数据，重点在于**保护最近被访问/使用过的数据，淘汰现阶段最久未被访问的数据**
 
 > LRU的主体思想在于：如果数据最近被访问过,那么将来被访问的几率也更高
@@ -11,13 +21,6 @@ LRU（ least recently used）根据数据的历史记录来淘汰数据，重点
 ![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b15a724eb4e044768044879587bcf9bb~tplv-k3u1fbpfcp-watermark.image?)
 
 **但实际上在 js 中无需这样实现，可以参考文章第四部分。先看 vue 的 keep-alive 实现。**
-
-## 1. keep-alive
-keep-alive 是 vue 中的内置组件，**使用 KeepAlive 后，被包裹的组件在经过第一次渲染后的 vnode 会被缓存起来，然后再下一次再次渲染该组件的时候，直接从缓存中拿到对应的 vnode 进行渲染，并不需要再走一次组件初始化，render 和 patch 等一系列流程，减少了 script 的执行时间，性能更好。**
-
-
-
-
 
 
 
@@ -265,3 +268,11 @@ LRUCache.prototype.put = function(key, value) {
 这里我们直接通过 Map 来就可以直接实现了。
 
 而 keep-alive 的实现因为缓存的内容是 vnode，直接操作 Map 中缓存的位置代价较大，通过 Set(vue3) / Array(vue2) 记录缓存 vnode 的 key 来模拟缓存顺序的变化。
+
+
+
+
+
+# 挂载/卸载
+
+挂载一个被keepalive的组件时，它并不会真的被卸载，而会被移动到一个隐藏容器中。当重新”挂载“该组件时，它也不会被真的挂载，而是被从隐藏容器中取出，再搬运到原来的容器中。这个过程对应到组件的activated和deactivated生命周期中。
