@@ -1,7 +1,7 @@
-Babel 的作用
+Babel 的作用：
 
-+ 语法转换，如将 ES6 转换成 ES5
-+ 补齐 API，通过 polyfill 的方式补齐目标环境缺少的语法如 async/await
++ **「语法转换」**，如将 ES6 转换成 ES5
++ **「补齐 API」**，通过 polyfill 的方式补齐目标环境缺少的语法如 async/await
 
 
 

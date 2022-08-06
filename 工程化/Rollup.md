@@ -1,7 +1,7 @@
   Rollup 号称下一代打包方案，具有以下特点：
 
-+ 仅支持 ES Next 模块
-+ 内置支持 tree shaking 功能
++ **仅支持 ES Next 模块**
++ **内置支持 tree shaking 功能**
 
 ------------------
 
