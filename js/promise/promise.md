@@ -62,7 +62,7 @@ Promise.prototype.then() 这个原型方法，主要完成两件事：
 1. 无论 onFulfilled与 onRejected 返回的是什么值，都将作为**「成功值 (value) 」**调用 promise2 的 resolve 置值器为 promise2 置值。
 
 2. 而在 Then 链中“产生” **「错误值 (reason) 」**的方法有两种：
-   + then 的 onFulfilled 方法抛出异常
+   + then 的 onFulfilled 方法执行发生错误，从而抛出异常
    + 通过 Promise.reject() 来显式地返回 reject 值
 
 
@@ -71,9 +71,9 @@ Promise.prototype.then() 这个原型方法，主要完成两件事：
 
 存在这样一种特殊情况：promise2 没有任何一个 onFulfilled、onRejected 响应函数。
 
-这种情况下：**如果没有有效的响应函数，仍将产生新的 promise2，并且它的 resolve 将以promise1[^3]的值为值。**
+这种情况下：**如果没有有效的响应函数，仍将产生新的 promise2，并且会使用默认的响应函数，以 promise1 的值作为 promise2的值。**
 
-于是出现了“错误冒泡”的现象：
+因此如果 promise1 代理的是错误值，那么 promise2 也将以该错误值作为其值。于是出现了“错误冒泡”的现象：
 
 在任意长的 Then 链中，如果链的前端出现了 **“reject 值”**，无论经过多少级 .then（且因为只有 onFulfilled 响应而为被处理），最终该 reject 值都能持续向后传递并被 “链尾的 .catch()” 响应到。
 
