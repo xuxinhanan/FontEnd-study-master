@@ -1,14 +1,14 @@
 ### 对称加密+非对称加密=安全层三次握手
 
-![img](https://static001.geekbang.org/resource/image/d5/45/d5cd34dbf3636ebc0e809aa424c53845.png?wh=1670*1022)
+![img](https://static001.geekbang.org/resource/image/77/af/77c852ff2202b2b7bb3299a96a0f4aaf.png?wh=1668*1160)
 
 
 
 从图中可以看出，加密流程是这样的：
 
 + 首先浏览器向服务器发送对称加密套件列表[^1]、非对称加密套件列表和随机数 client-random；
-+ 服务器保存随机数 client-random，选择对称加密和非对称加密的套件，然后生成随机数 service-random，向浏览器发送选择的加密套件、service-random 和公钥；
-+ 浏览器保存公钥，并生成随机数 pre-master，然后利用公钥对 pre-master 加密，并向服务器发送加密后的数据；
++ 服务器保存随机数 client-random，选择对称加密和非对称加密的套件，然后生成随机数 service-random，向浏览器发送选择的加密套件、service-random 和数字证书；
++ 浏览器验证数字证书后保存公钥，并生成随机数 pre-master，然后利用公钥对 pre-master 加密，并向服务器发送加密后的数据；
 + 最后服务器拿出自己的私钥，解密出 pre-master 数据，并返回确认消息。
 
 

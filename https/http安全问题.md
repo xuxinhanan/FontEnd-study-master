@@ -18,3 +18,4 @@ HTTPS 并不是新协议，而是让 HTTP 先和 SSL（Secure Sockets Layer）�
 
 - 因为需要进行加密解密等过程，因此速度会更慢
 - 需要支付证书授权的高额费用
+
