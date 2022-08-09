@@ -1,7 +1,7 @@
-## 资源的加载、解析
+## 资源的加载、解析名词解释
 
-+ 加载资源即加载服务器传过来的数据
-+ 解析资源即渲染线程解析 HTML、CSS 资源构建 DOM 树和 styleSheet，主线程解析执行JavaScript 脚本资源
++ **「加载」**：即加载服务器传过来的数据
++ **「解析」**：即渲染线程解析 HTML、CSS ，主线程解析执行JavaScript 
 
 
 
@@ -13,12 +13,12 @@
 
 
 
-浏览器会做如下处理
+浏览器会做如下处理：
 
-- **[ 同步加载 ]**，停止解析 document
+- **「 同步加载 」**，停止解析 HTML
 - 请求 `foo.js`
 - 解析执行 `foo.js` 中的脚本
-- 继续解析 document
+- 继续解析 HTML
 
 
 
@@ -34,8 +34,8 @@
 ~~~
 
 - 不阻止解析 document，并行下载 `foo.js`、`bar.js`
-- 即使下载完 `foo.js` 和 `bar.js` 仍继续解析 document
-- 按照页面中出现的顺序，在其他同步脚本执行后，`DOMContentLoaded` 事件前依次执行 `foo.js` 和 `bar.js`
+- 即使下载完 `foo.js`  仍继续解析 document
+- 按照页面中出现的顺序，在其他同步脚本执行后，`DOMContentLoaded` 事件[^1][^2]前执行 `foo.js` 
 
 ### async
 
@@ -50,7 +50,7 @@
 
 - 当脚本下载完成后立即执行
 
-- 两者执行顺序不确定，执行阶段不确定，可能在 `DOMContentLoaded` 事件前或者后
+- 执行顺序不确定，执行阶段不确定，可能在 `DOMContentLoaded` 事件前或者后
 
   
 
@@ -58,19 +58,19 @@
 
 ## 加载事项
 
-- `<link>`：加载外部 CSS 样式文件 。异步加载，继续解析 HTML。
-- `<img src='url' />`：加载图片，异步加载，继续解析 HTML；但是需要等待 CSS 解析完才解码，所以 CSS 阻塞图片呈现。
+- `<link>`：加载外部 CSS 样式文件 。**异步加载**，继续解析 HTML。
+- `<img src='url' />`：加载图片，**异步加载**，继续解析 HTML；但是需要等待 CSS 解析完才解码，所以 CSS 阻塞图片呈现。
 
 - 平时我们把 `<link>` 标签放在`<body>`头部而 `<script>` 放 `<body>` 尾部，是因为 JavaScript 阻塞 DOM 树的构建
-- 但是 **JavaScript 需要查询 CSS 信息**，所以 JavaScript 还要等待 CSSOM 树构建完才可以执行，**这就造成 CSS 阻塞了 JavaScript**，JavaScript 阻塞了 DOM 树构建
+- 但是 JavaScript 需要查询 CSS 信息，所以 JavaScript 还要等待 CSSOM 树构建完才可以执行，这就造成 CSS 阻塞了 JavaScript，JavaScript 阻塞了 DOM 树构建
 
 - 浏览器遇到 `<script>` 且没有 `defer` 或 `async` 属性的标签时，会触发页面渲染，因而如果前面 CSS 资源尚未加载完毕时，浏览器会等待它加载完毕在执行脚本。
 
 
 
-**DOMContentLoaded 标识着程序从同步脚本执行转化为事件驱动阶段。**
 
-DOMContentLoaded 事件在 DOM 树构建完成后立即触发，而不用等待图片、JavaScript文件、CSS文件或其他资源加载完成。
+
+
 
 
 
@@ -81,3 +81,9 @@ DOMContentLoaded 事件在 DOM 树构建完成后立即触发，而不用等待�
 + Doctype声明于文档最前面，告诉浏览器以何种方式来渲染页面，这里有两种模式，严格模式和混杂模式。
 + **严格模式** 的排版和JS 运作模式是 以该浏览器支持的最高标准运行。
 + **混杂模式**，向后兼容，模拟老式浏览器，防止浏览器无法兼容页面。
+
+
+
+[^1]: DOMContentLoaded 事件在 DOM 树构建完成后立即触发，而不用等待图片、JavaScript文件、CSS文件或其他资源加载完成。
+[^2]: DOMContentLoaded 标识着程序从同步脚本执行转化为事件驱动阶段。
+
