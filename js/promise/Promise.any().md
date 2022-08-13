@@ -1,4 +1,4 @@
->:heavy_exclamation_mark::heavy_exclamation_mark: **用于获取首个 resolved 的 `promise` 的值[^1]。**
+>:heavy_exclamation_mark:  **用于获取首个 resolved 的 `promise` 的值[^1]。**
 
 
 

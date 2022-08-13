@@ -1,4 +1,4 @@
-> :heavy_exclamation_mark::heavy_exclamation_mark: `Promise.resolve(value)` 用结果 `value` 创建一个 resolved 的 promise。
+> :heavy_exclamation_mark:  `Promise.resolve(value)` 用结果 `value` 创建一个 resolved 的 promise。
 
 
 

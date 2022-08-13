@@ -1,4 +1,4 @@
-> :heavy_exclamation_mark::heavy_exclamation_mark: 用于并行执行多个 promise，并等待所有 promise 都被 resolved。如果任意的 promise 被 rejected，则 Promise.all 整个将会 rejected。
+> :heavy_exclamation_mark:  用于并行执行多个 promise，并等待所有 promise 都被 resolved。如果任意的 promise 被 rejected，则 Promise.all 整个将会 rejected。
 
 
 

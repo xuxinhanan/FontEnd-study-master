@@ -1,4 +1,4 @@
-> :heavy_exclamation_mark::heavy_exclamation_mark: `Promise.allSettled` 等待所有的 promise 都被 settle，无论结果如何。
+> :heavy_exclamation_mark:  `Promise.allSettled` 等待所有的 promise 都被 settle，无论结果如何。
 
 
 

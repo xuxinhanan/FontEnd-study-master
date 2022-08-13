@@ -1,4 +1,4 @@
->:heavy_exclamation_mark::heavy_exclamation_mark: race（竞赛）：只等待其中一个 `settled` 的 `promise`（不关注其 resolved 还是 rejected） 并获取其结果。
+>:heavy_exclamation_mark:   race（竞赛）：只等待其中一个 `settled` 的 `promise`（不关注其 resolved 还是 rejected） 并获取其结果。
 
 
 
