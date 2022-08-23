@@ -56,7 +56,7 @@ Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT;
 
 
 
-### 4. JavaScript
+### 4. JavaScript 获取 cookie
 
 浏览器通过 `document.cookie` 属性可创建新的 Cookie，也可通过该属性访问非 HttpOnly 标记的 Cookie。
 
@@ -68,7 +68,7 @@ console.log(document.cookie);
 
 
 
-### 5.安全
+### 5.安全相关字段
 
 | 属性      | 作用                                                         |
 | --------- | ------------------------------------------------------------ |

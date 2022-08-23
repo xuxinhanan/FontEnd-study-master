@@ -8,7 +8,7 @@
 
 ### :white_check_mark: 第一次握手
 
-首先浏览器向服务器发送对称加密套件列表[^1]、非对称加密套件列表和随机数 client-random；
+在 TCP 建立连接之后，浏览器会首先发一个“Client Hello”消息，也就是跟服务器“打招呼”。里面有**TLS版本号**、**支持的密码套件列表**[^1]，还有一个**随机数 Client Random**，用于后续生成会话密钥。
 
 ![img](https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4@main/%E7%BD%91%E7%BB%9C/https/clienthello.png)
 
