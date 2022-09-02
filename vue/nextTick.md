@@ -1,14 +1,14 @@
-nextTick 的实现中，首先申明了 `timerFunc` 变量，然后会去检测环境来决定最终函数的实现方式。优先实现为promise的版本。
+:white_check_mark: **`nextTick()`的逻辑很简单，把传入的回调函数 `cb` 压入 `callbacks` 数组，后续依次取出并执行。并且会根据环境检测结果来决定回调在微任务中还是宏任务中执行。优先实现为 promise.then() 中执行。**
 
-- 为什么优先实现为微任务版本？
 
-  根据 HTML Standard，在每个 task 运行完以后，UI 都会重渲染，那么在 microtask 中就完成数据更新，当前 task 结束就可以得到最新的 UI 了。如果新建一个 task 来做数据更新，那么渲染就会进行两次。
-
-继续看 `nextTick()`，它的逻辑也很简单，把传入的回调函数 `cb` 压入 `callbacks` 数组，然后执行 `timerFunc` 时执行 `flushCallbacks`。`flushCallbacks` 的逻辑非常简单，对 `callbacks` 遍历，然后执行相应的回调函数。
 
 - 为什么使用 `callbacks` 而不是直接在 `nextTick` 中执行回调函数？
 
   原因是保证在同一个 tick 内多次执行 `nextTick`，不会开启多个异步任务，而把这些异步任务都压成一个同步任务，在下一个 tick 执行完毕。
+  
+- 为什么优先实现为微任务版本？
+
+  根据 HTML Standard，在每个 “宏任务” 运行完以后，UI 都会重渲染，那么在 “微任务” 中就完成数据更新，当前 “宏任务” 结束就可以得到最新的 UI 了。如果新建一个 “宏任务” 来做数据更新，那么渲染就会进行两次。
 
 ```js
 export let isUsingMicroTask = false

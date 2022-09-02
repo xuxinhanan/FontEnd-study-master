@@ -18,28 +18,6 @@
 
 
 
-## 同源策略
-
-![图片](https://mmbiz.qpic.cn/mmbiz_png/TdGLaSU675g4DAZVKvyibzSibMa3kMOspnmNibvAjsvE13fQJicIQmKvvrcDcib1OibkxvIcCXktPTnsxetoaBKbWbhw/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
-
-
-
-:heavy_exclamation_mark: **同源是指页面具有相同的协议、域名、端口号，有一项不同就不是同源 。**
-
------
-
-浏览器默认两个相同的源之间是可以相互访问资源和操作 DOM 的。两个不同的源之间若想要相互访问资源或者操作 DOM，那么会有一套基础的安全策略的制约。 
-
-具体来讲，同源策略主要表现在以下三个方面：
-
-:one: **DOM 层面**：同源策略限制了来自不同源的 JavaScript 脚本对当前 DOM 对象读和写的操作。
-
-:two: **数据层面**：同源策略限制了不同源的站点读取当前站点的 Cookie、indexDB、LocalStorage 等数据。
-
-:three: **网络层面**：不同源，则会发生跨域的问题。浏览器触发保护机制，拦截该请求的响应结果。(如在 A URL 下的页面发起对 B URL的请求，如果 A、B 不同源就会发生跨域问题）
-
-
-
 
 
 ## JSONP跨域
