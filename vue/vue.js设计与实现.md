@@ -328,6 +328,8 @@ function mountComponent(vnode, container) {
 
 ### 2.分支切换导致冗余依赖的问题
 
+一句话总结：由于分支切换导致的冗余依赖的问题，于是在 watcher 中增加 deps 数组来管理 watcher，每次收集依赖时将依赖存储在 deps 数组中，当再次通过 watcher 执行副作用函数时，清除
+
 对于代码中存在的条件判断的情况（如三元表达式`obj.ok ? obj.text : not`），当判断条件 obj.ok 的值发生变化时，代码执行的分支就会跟着变化。这就是所谓的分支切换。
 
 

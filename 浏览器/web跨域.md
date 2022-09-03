@@ -83,25 +83,19 @@ module.exports = {
 
 ## CORS跨源资源共享
 
-> :heavy_exclamation_mark::heavy_exclamation_mark: **跨源资源共享是浏览器同源策略的一道后门，这个机制允许服务器标识哪些源站有权通过浏览器访问它的资源。**
+:heavy_exclamation_mark::heavy_exclamation_mark: **跨源资源共享是浏览器同源策略的一道后门，这个机制中服务器必须在 HTTP 响应中显式的标识哪些站点有权通过浏览器访问它的资源。**
 
+事实上，跨域请求的访问有多种解决方案，但是其他解决方案都是浏览器的实现 Bug、或者当前还没有考虑到的问题。在HTTP架构中，推荐的是 CORS 这种做法。
 
-
-客户端发起跨源请求时标记自己的源：如`Origin: https://foo.example`；服务器返回的响应带上 Access-Control-Allow-Origin 服务器用来声明哪些源站有权通过浏览器访问资源；如果响应头没有 Access-Control-Allow-Origin 字段，服务器就会拦截本次请求的响应结果，并抛出错误。
-
-
-
-发送请求时出现两种情况，分别为简单请求和复杂请求。
+实际上，浏览器又把同源策略下的跨域请求分成两种类型，简单请求和复杂请求。
 
 ### **简单请求**
 
-不会触发 CORS 预检请求视为简单请求。需要满足下列条件：
+简单请求需要满足下列条件：
 
-1. 请求方法为 GET、POST 、HEAD
+1. 请求方法为 GET / POST / HEAD
 
-
-
-2. 请求头可以设置的字段: 
+2. 请求发起时仅能使用 CORS 安全的头部（四种用于内容协商时的头部）: 
 
 ​		Accept（用来告知（服务器）客户端可以处理的内容类型）、
 
@@ -109,28 +103,20 @@ module.exports = {
 
 ​		Content-Language（用于指定页面的目标受众语言方式）、
 
-​		Content-Type (POST 请求提交的内容编码类型限制为名称/值对，或者一条消息，或者纯文本三者方式)
+​		Content-Type
+
+3. `Content-Type`（媒体类型）的值仅限于下列三者之一：
+   - `text/plain`
+   - `multipart/form-data`
+   - `application/x-www-form-urlencoded`
 
 
 
-3. 请求中的任意 XMLHttpRequest 对象均没有注册任何事件监听器
+:white_check_mark: 简单请求跨域：
 
++ 请求携带 Origin 头部告知来自哪个域：如`Origin: https://foo.example`；
 
-
-:white_check_mark: 响应：
-
-~~~
-HTTP/1.1 200 OK
-Date: Mon, 01 Dec 2008 00:23:53 GMT
-Server: Apache/2
-Access-Control-Allow-Origin: *  声明哪些源站有权通过浏览器访问资源
-Keep-Alive: timeout=2, max=100
-Connection: Keep-Alive
-Transfer-Encoding: chunked
-Content-Type: application/xml
-~~~
-
-
++ 服务器返回的响应带上` Access-Control-Allow-Origin `表示允许哪些域；如果 Access-Control-Allow-Origin 允许的域名与当前页面的域名不匹配，服务器就会拦截本次请求的响应结果，并抛出错误。
 
 <img src="https://mmbiz.qpic.cn/mmbiz_png/TdGLaSU675g4DAZVKvyibzSibMa3kMOspnfXZ8x7UDBCzYVMlJ8sETayDz7Lib3Opcicek9b5z1vC0qfiaZWj8VmRzA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="图片" style="zoom: 50%;" />
 
@@ -138,40 +124,25 @@ Content-Type: application/xml
 
 
 
-### **非简单请求**
+### 复杂请求
 
-不满足简单请求的条件的请求即为非简单请求。非简单请求是那种可能对服务器数据产生副作用的 HTTP 请求方法。比如请求方法是 PUT 、DELETE，或者 POST 请求的 Content-Type 字段的类型是 application/json。这时浏览器必须首先使用 OPTIONS 方法发起一个**预检请求**，以获知服务端是否允许该跨源请求。可以避免跨域请求对服务器的用户数据产生未预期的影响。
+不满足简单请求的条件的请求均为复杂请求。复杂请求必须首先使用 OPTIONS 方法发起一个**预检请求**。以获知服务端是否允许该跨源请求。可以避免跨域请求对服务器的用户数据产生未预期的影响。
 
 
+
+非简单请求是那种可能对服务器数据产生副作用的 HTTP 请求方法。比如请求方法是 PUT 、DELETE，或者 POST 请求的 Content-Type 字段的类型是 application/json。
 
 ### 预检
 
-:white_check_mark: 预检请求：
+:white_check_mark: 预检请求头部：
 
-~~~
-OPTIONS /doc HTTP/1.1    使用 OPTIONS 方法发起预检请求
-Host: bar.other
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:71.0) Gecko/20100101 Firefox/71.0
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
-Accept-Language: en-us,en;q=0.5
-Accept-Encoding: gzip,deflate
-Connection: keep-alive
-Origin: https://foo.example
-Access-Control-Request-Method: POST
-Access-Control-Request-Headers: X-PINGOTHER, Content-Type
-~~~
++ Access-Control-Request-Method 告知服务器接下来的请求会使用哪些方法
++ Access-Control-Request-Headers 告知服务器接下来的请求会传递哪些头部
 
 :white_check_mark: 服务器响应：
 
-```
-HTTP/1.1 204 No Content
-Date: Mon, 01 Dec 2008 01:15:39 GMT
-Server: Apache/2
-Access-Control-Allow-Origin: https://foo.example
-Access-Control-Allow-Methods: POST, GET, OPTIONS
-Access-Control-Allow-Headers: X-PINGOTHER, Content-Type
-Access-Control-Max-Age: 86400
-Vary: Accept-Encoding, Origin
-Keep-Alive: timeout=2, max=100
-Connection: Keep-Alive
-```
++ Access-Control-Allow-Methods 告知客户端后续请求允许使用的方法
++ Access-Control-Allow-Headers 告知客户端后续请求允许携带的头部
++ Access-Control-Max-Age 告知客户端该响应的信息可以缓存多久
+
+![img](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/preflight_correct.png)
