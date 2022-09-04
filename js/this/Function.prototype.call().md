@@ -19,3 +19,4 @@ Function.prototype.mycall = function(context, ...args) {
 
 1. Symbol 值作为对象属性名不能用点运算符，因为会转为字符串
 2. Symbol 值只能通过 Symbol 函数生成，Symbol 函数前不能使用 new 命令实例化
+
