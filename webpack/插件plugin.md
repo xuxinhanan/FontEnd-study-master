@@ -14,7 +14,13 @@ class SomePlugin {
 
 例如`compiler.hooks.thisCompilation.tap`： 
 
-+ 这里面 `thisCompilation` 是钩子名称，为 tapable 仓库提供的钩子对象
++ 这里面 `thisCompilation` 是钩子名称，为 tapable 仓库提供的钩子对象。
+
+  `thisCompilation: new SyncHook(["compilation", "params"])`
+
+  Tapable暴露出的钩子如下所示：
+
+  ![img](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2a78e89c5f5440f09dc13ab83e82d0bb~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp)
 
 + `tap` 用于注册回调，插件开发者可以使用这种模式在钩子回调中，插入特定代码。
 
