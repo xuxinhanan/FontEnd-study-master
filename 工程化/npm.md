@@ -1,25 +1,16 @@
-~~~cmd
-# 初始化 Node 项目，生成 package.json 文件
-npm init
+![image-20220709222119989](C:\Users\64554\AppData\Roaming\Typora\typora-user-images\image-20220709222119989.png)
 
-# 安装本地依赖包
-npm install
+------------------
 
-# 安装全局依赖包
-npm install -g
+npm run 执行 scripts 中配置的脚本。
 
-# 更新本地依赖包
-npm update
 
-# 更新全局依赖包
-npm update -g
 
-# 卸载本地依赖包
-npm uninstall
+---------
 
-# 执行 scripts 配置的命令
-npm run
-~~~
+npm 的依赖分为正常依赖和开发时依赖。
+
+如 nodemon 即为开发时依赖，作用是热更新。
 
 ## npm
 
@@ -40,8 +31,6 @@ npm install -g cnpm --registry=https://registry.npm.taobao.org
 + 超级可靠：使用详细、简洁的锁文件（yarn.lock）格式和明确的安装依赖包的算法，YARN能够保证在不同系统上无差异地工作。
 
 
-
-![image-20220709222119989](C:\Users\64554\AppData\Roaming\Typora\typora-user-images\image-20220709222119989.png)
 
 
 
