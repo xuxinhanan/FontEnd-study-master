@@ -32,7 +32,7 @@
 
 ### 利用分层技术优化代码：使用transform代替top
 
-`top`是几何属性，操作`top`会改变节点位置引发重排，使用`transform:translate3d(x,0,0)`代替`top`，只会引发**合成**操作，并**『启动GPU加速』**。
+`top`是几何属性，操作`top`会改变节点位置引发重排，使用`transform:translate3d(x,0,0)`代替`top`，只会引发**合成**操作，**并 启动GPU加速，让浏览器在渲染动画时从`CPU`转向`GPU`。**
 
 
 
