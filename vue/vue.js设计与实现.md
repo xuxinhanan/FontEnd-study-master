@@ -359,6 +359,8 @@ function effect(fn) {
 
 于是拦截响应式对象的”读取“操作时，就可以顺便收集 effectFn.deps 集合：
 
+> **拦截“读”的 track 操作：从存储空间里获取当前响应式对象的依赖集合 depsMap，从依赖集合depsMap中获取响应式对象的某个数据的依赖集合deps，并将当前副作用函数添加到 deps 中**
+
 ~~~js
 function track(target, key) {
   if (!activeEffect) return
@@ -474,6 +476,8 @@ effect(() => obj.foo++)
 ~~~
 
 这样会导致该副作用函数正在执行，并且还没有执行完毕就要开始下一次执行了（由“设置”操作引发）。于是导致无限调用自身。为了解决这个问题，只需在重新执行依赖时，**添加守卫条件即可**。
+
+> **拦截“写”的 trigger 操作：从存储空间中取出响应式对象的依赖集合 depsMap，并从中获取某个属性的依赖集合 deps，然后遍历并执行其中的副作用函数。**
 
 ~~~js
 function trigger(target, key) {

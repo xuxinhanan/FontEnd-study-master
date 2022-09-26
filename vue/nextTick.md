@@ -1,4 +1,8 @@
-:white_check_mark: **`nextTick()`的逻辑很简单，把传入的回调函数 `cb` 压入 `callbacks` 数组，后续依次取出并执行。并且会根据环境检测结果来决定回调在微任务中还是宏任务中执行。优先实现为 promise.then() 中执行。**
+> :white_check_mark: **vue 是异步更新的，因此不能直接拿到更新后的 DOM，需要通过 nextTick() 来获取。**
+
+
+
+ `nextTick()`的逻辑很简单，把传入的回调函数 `cb` 压入 `callbacks` 数组，后续依次取出并执行。并且会根据环境检测结果来决定回调在微任务中还是宏任务中执行。优先实现为 promise.then() 中执行。
 
 
 
