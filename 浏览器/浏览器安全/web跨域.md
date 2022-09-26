@@ -44,8 +44,13 @@
 
 ![img](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2020/3/22/170ffd97d0b1cf15~tplv-t2oaga2asx-zoom-in-crop-mark:1304:0:0:0.awebp)
 
-+ **正向代理** 就是客户端向代理服务器发送请求，并且指定目标服务器，之后代理向目标服务器转交并且将获得的内容返回给客户端。服务器并不知道是谁发的请求，比如翻墙。
-+ **反向代理** 代理的是服务器，代理会判断请求走向何处，并将请求转交给客户端，客户端只会觉得这个代理是一个真正的服务器。Nginx就是性能非常好的反向代理服务器，用来做负载均衡。
++ **正向代理**：一般的访问流程是客户端直接向目标服务器发送请求并获取内容，使用正向代理后，客户端改为向代理服务器发送请求，并指定目标服务器（原始服务器），然后由代理服务器和原始服务器通信，转交请求并获得的内容，再返回给客户端。正向代理隐藏了真实的客户端，为客户端收发请求，使真实客户端对服务器不可见；
+
+  
+
++ **反向代理**： 与一般访问流程相比，使用反向代理后，直接收到请求的服务器是代理服务器，然后将请求转发给内部网络上真正进行处理的服务器，得到的结果返回给客户端。反向代理隐藏了真实的服务器，为服务器收发请求，使真实服务器对客户端不可见。一般在处理跨域请求的时候比较常用。现在基本上所有的大型网站都设置了反向代理。
+
+  
 
 
 
@@ -53,15 +58,31 @@
 
 
 
+```ini
+// 配置 nginx
+server {
+        listen 80;
+        server_name local.test;
+        location /api {
+            proxy_pass http://localhost:8080;
+        }
+        location / {
+            proxy_pass http://localhost:8000;
+        }
+}
+```
 
 
-### Webpack Server代理
+
+
+
+### Node正向代理
 
 在 webpack 中可以通过配置 proxy 来在浏览器和服务端之间添加代理服务器。本质还是代理跨域。
 
 ![图片](https://mmbiz.qpic.cn/mmbiz_png/TdGLaSU675g4DAZVKvyibzSibMa3kMOspnV0aLvp2Eu5E9VkvEuf4ZdNXO1tK0Nchib9rBt9651q8ZCqkmaRmCicSA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 
-可在前端`webpack.config.js`配置代理：
+通过配置 webpack-dev-server 实现：
 
 ```js
 module.exports = {
@@ -146,3 +167,41 @@ module.exports = {
 + Access-Control-Max-Age 告知客户端该响应的信息可以缓存多久
 
 ![img](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/preflight_correct.png)
+
+
+
+
+
+## Websocket
+
+这种方式本质没有使用了 HTTP 的响应头, 因此也没有跨域的限制，没有什么过多的解释直接上代码吧。
+
+前端部分
+
+```ini
+<script>
+  let socket = new WebSocket("ws://localhost:8080");
+  socket.onopen = function() {
+    socket.send("秋风的笔记");
+  };
+  socket.onmessage = function(e) {
+    console.log(e.data);
+  };
+</script>
+复制代码
+```
+
+后端部分
+
+```vbscript
+const WebSocket = require("ws");
+const server = new WebSocket.Server({ port: 8080 });
+server.on("connection", function(socket) {
+  socket.on("message", function(data) {
+    socket.send(data);
+  });
+});
+```
+
+
+

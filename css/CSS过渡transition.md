@@ -10,12 +10,20 @@ transition 的理念非常简单，我们只需要定义某一个属性以及如
 
 ------
 
-CSS 提供了四个属性来描述一个过渡：
+transition 属性是一个简写属性，用于设置四个过渡属性：
 
 - `transition-property`
 - `transition-duration`
 - `transition-timing-function`
 - `transition-delay`
+
+**注释：**请始终设置 `transition-duration` 属性，否则时长为 0，就不会产生过渡效果。
+
+| 默认值：          | all 0 ease 0                         |
+| ----------------- | ------------------------------------ |
+| 继承性：          | no                                   |
+| 版本：            | CSS3                                 |
+| JavaScript 语法： | *object*.style.transition="width 2s" |
 
 --------
 

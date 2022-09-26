@@ -24,7 +24,7 @@ TLS 里使用的**混合加密**方式，其实说穿了也很简单：
 
 ### :white_check_mark:第二次握手
 
-服务器保存随机数 client-random，选择对称加密和非对称加密的套件，然后生成随机数 service-random，向浏览器发送选择的加密套件[^2]、service-random 和数字证书；
+服务器保存随机数 client-random，选择加密套件，然后生成随机数 service-random，向浏览器发送选择的加密套件[^2]、service-random 和数字证书；
 
 ![img](https://cdn.xiaolincoding.com/gh/xiaolincoder/ImageHost4@main/%E7%BD%91%E7%BB%9C/https/serverhello.png)
 

@@ -58,7 +58,7 @@ DELETE /idX/delete HTTP/1.1   -> Returns 404
 
 GET 请求会被浏览器主动缓存下来，留下历史记录，而 POST 默认不会。
 
-
+ 
 
 ### TCP包
 
