@@ -178,7 +178,7 @@ module.exports = {
 
 前端部分
 
-```ini
+```html
 <script>
   let socket = new WebSocket("ws://localhost:8080");
   socket.onopen = function() {
@@ -188,7 +188,6 @@ module.exports = {
     console.log(e.data);
   };
 </script>
-复制代码
 ```
 
 后端部分
