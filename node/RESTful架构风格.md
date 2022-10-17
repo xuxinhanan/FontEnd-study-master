@@ -1,48 +1,39 @@
-RESTful 架构：是一种以逻辑方式构建 web API 的方式，以使它们易于使用。
+#### RESTful架构
 
-RESTful 架构具有以下几个原则：
+原则：
 
-1. 将 API 分成逻辑资源[^1]，然后暴露这些资源，这意味着可以使用结构化的、基于资源的 URL。
-2. 对数据执行不同操作比如读取或创建或删除数据，API应该使用正确的 HTTP 方法而不是 URL。
-3. 通常应该使用 JSON 格式的数据。
-
-
-
----------------
-
-RESTful架构应该遵循统一接口原则。统一接口包含了一组受限的预定义操作，不论什么样的资源，都是通过使用相同的接口进行资源访问。
-
-简单来说，任何接口的URL都可以抽象成如下两部分：
-
-（1）**资源：必须是名词且都是复数形式。**
-
-例如，下述URL不是名词，所以不符合RESTful规范：
-
-![image-20220914155212956](C:\Users\64554\AppData\Roaming\Typora\typora-user-images\image-20220914155212956.png)
-
-端点应该只包含资源，而不是可以对它们执行的操作。上述URL将很快成为维护的噩梦。
+1. 将API划分成逻辑资源
+2. 暴露API，通过结构化的、基于资源的url进行访问
+3. 对资源进行CRUD操作时，API应该使用正确的HTTP方法而不是URL
+4. 发送给客户端的数据应该是JSON格式
+5. 服务器端无状态
 
 
 
-
-
-（2）**动作：通过HTTP所定义的方法来表述对资源的动作。**
-
-上面的 API 经过 RESTful 架构改造后的结果如下：
-
-![image-20220914160238968](C:\Users\64554\AppData\Roaming\Typora\typora-user-images\image-20220914160238968.png)
+rest 需要抽象资源，将我们想分享的所有数据资源划分成逻辑资源API（例如聊天室项目中的聊天记录数据messages）
 
 
 
+对资源进行CRUD操作时，API应该使用正确的HTTP方法而不是URL。例如：
+
+| bad API            | Good API                     |            |
+| ------------------ | ---------------------------- | ---------- |
+| /addNewTour        | POST        /tours           | Create操作 |
+| /getTour           | GET           /tours/7       | Read操作   |
+| /updateTour        | PUT           /tours/7       | Update操作 |
+|                    | PATCH      /tours/7          |            |
+| /deleteTour        | DELETE     /tours/7          | Delete操作 |
+|                    |                              |            |
+| /getToursByUser    | GET           /users/3/tours |            |
+| /deleteToursByUser | DELETE     /users/3/tours/9  |            |
 
 
-（3）无状态：所有状态都将在客户端上进行处理。这意味着每个请求必须包含处理某个请求所需的所有信息。服务器不应该需要记住以前的请求。
 
-![image-20220914161801098](C:\Users\64554\AppData\Roaming\Typora\typora-user-images\image-20220914161801098.png)
+以JSend形式发送数据给客户端：
 
-### 响应数据
+### ![image-20221017133357721](C:\Users\64554\AppData\Roaming\Typora\typora-user-images\image-20221017133357721.png)
 
-**API返回的数据格式不推荐使用纯文本，而应该返回标准化的结构化数据，如JSON格式的数据。**因此，在服务器响应的HTTP头中，将Content-Type的属性设为application/json。
+API返回的数据格式不推荐使用纯文本，而应该返回标准化的结构化数据，如JSON格式的数据。因此，在服务器响应的HTTP头中，将Content-Type的属性设为application/json。
 
 当然，客户端请求时也要明确告诉服务器可以接受JSON数据的格式，即在请求的HTTP头中将ACCEPT属性设为application/json。
 
