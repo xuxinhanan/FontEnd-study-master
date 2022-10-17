@@ -17,15 +17,17 @@
 
 
 
-JWT只存储在COOKIE中，并设置HTTPOnly。目的是防止XSS攻击（黑客将脚本注入我们的页面以运行他的恶意代码，而黑客脚本可以读取本地存储。这就是为什么我们应该将JWT存储在COOKIE中，而不是存储在localStorage）
+==JWT只存储在设置了 HTTPOnly 的 COOKIE 中。目的是防止XSS攻击==
 
 
 
 
 
-+ 存储在localStorage中：每次请求需要添加头部Authorization
+## 存储方式
 
-+ 存储在cookie中：每次访问接口url后，浏览器自动带上cookie，因此jwt自动发送，后端只需要解析cookie拿到jwt即可
++ 存储在localStorage中：每次请求需要添加头部Authorization进行传递，**这种存储方式有效避免了 CSRF 攻击**（因为，即使你点击了非法链接发送了请求到服务端，这个非法请求是不会携带 token 的，所以这个请求将是非法的）
+
++ 存储在cookie中：每次访问接口url后，浏览器自动带上cookie，因此jwt自动发送，后端只需要解析cookie拿到jwt即可，**这种存储方式有效避免了 XSS 攻击**（黑客将脚本注入我们的页面以运行他的恶意代码，而黑客脚本可以读取本地存储。这就是为什么我们应该将JWT存储在COOKIE中，而不是存储在localStorage）
 
 
 
@@ -116,15 +118,6 @@ exports.protect = catchAsync(async (req, res, next) => {
 
 
 
-
----------------
-
-## Token 认证的优势
-
-1. 无状态
-2. 有效避免了 CSRF 攻击(一般会选择存放在 local storage 中。然后我们在前端通过某些方式会给每个发到后端的请求加上这个 token,这样就不会出现 CSRF 漏洞的问题。因为，即使你点击了非法链接发送了请求到服务端，这个非法请求是不会携带 token 的，所以这个请求将是非法的。)
-3. 适合移动端应用
-4. 单点登录友好
 
 
 

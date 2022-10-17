@@ -26,9 +26,9 @@ Sec-WebSocket-Version: 13
 
 在前端中，我们主要做三件事：
 
-1. 打开连接。
-2. 在表单提交中 —— `socket.send(message)` 用于消息。
-3. 对于服务器推送的消息 —— 将其附加到页面上。
+1. **打开连接。**
+2. **前端提交消息 —— `socket.send(message)` 。**
+3. **监听服务器推送事件，并将内容附加到页面上。**
 
 
 
@@ -36,11 +36,11 @@ Sec-WebSocket-Version: 13
 
 在后端中，我们主要做三件事：
 
-1. 创建 `clients = new Set()` —— 一系列 socket。
+1. **创建 `clients = new Set()` —— 一系列 socket。**
 
-2. 对于每个被接受的 WebSocket，将其添加到 `clients.add(socket)`集合中，并为其设置 `message` 事件侦听器以获取其消息。
+2. **对于每个被接受的 WebSocket，将其添加到 `clients.add(socket)`集合中，并为其设置 `message` 事件侦听器以获取其消息。**
 
-3. 当接收到消息：遍历客户端，并将消息发送给所有人。
+3. **当接收到消息：遍历客户端socket，并将消息发送给所有人。**
 
    
 
